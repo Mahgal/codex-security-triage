@@ -1,0 +1,22 @@
+$ python3 triage.py examples/findings.sample.json --fail-on-severity high
+# Codex Security triage report
+
+Total findings: **3**
+
+- High: 1
+- Medium: 1
+- Low: 1
+
+## [HIGH] SQL injection in user lookup
+
+Location: `app/routes.py:87`
+Confidence: high
+
+User input from request.args is interpolated directly into a SQL query, allowing an attacker to read or modify arbitrary rows.
+
+**Remediation:** Use a parameterized query (cursor.execute with placeholders) instead of string interpolation.
+
+
+gate failed: 1 finding(s) at or above high
+$ echo $?
+1

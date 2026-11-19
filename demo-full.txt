@@ -1,0 +1,38 @@
+$ python3 triage.py examples/findings.sample.json --fail-on-severity high
+# Codex Security triage report
+
+Total findings: **3**
+
+- High: 1
+- Medium: 1
+- Low: 1
+
+## [HIGH] SQL injection in user lookup
+
+Location: `app/routes.py:87`
+Confidence: high
+
+User input from request.args is interpolated directly into a SQL query, allowing an attacker to read or modify arbitrary rows.
+
+**Remediation:** Use a parameterized query (cursor.execute with placeholders) instead of string interpolation.
+
+## [MEDIUM] Session cookie missing Secure flag
+
+Location: `app/auth.py:54`
+Confidence: medium
+
+The session cookie is set without the Secure flag, so it can be sent over plain HTTP on networks that allow downgrade.
+
+**Remediation:** Set Secure=True (and HttpOnly) when creating the session cookie.
+
+## [LOW] Stack trace exposed in error response
+
+Location: `app/errors.py:12`
+Confidence: low
+
+Error responses include a full stack trace, which leaks internal file paths and library versions.
+
+**Remediation:** Return a generic error message to clients and log the stack trace server-side.
+gate failed: 1 finding(s) at or above high
+$ echo $?
+1
